@@ -1,0 +1,65 @@
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 23386282
+Server version: 8.0.40 Source distribution
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| Victordan$LIBRERIA |
+| Victordan$default  |
+| information_schema |
+| performance_schema |
++--------------------+
+4 rows in set (0.84 sec)
+mysql> use Victordan$default  ;
+Database changed
+mysql> CREATE TABLE Articulos_1 (
+    ->     articulo varchar(15) DEFAULT NULL
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+mysql> CREATE TABLE Articulos_2 (
+    ->     articulo varchar(15) DEFAULT NULL
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+mysql> 
+mysql> insert into Articulos_1 ( articulo) values
+    -> ('Azucar'),
+    -> ('Pan'),
+    -> ('Jugo'),
+    -> ('Refresco'),
+    -> ('Harina');
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+mysql> insert into Articulos_2 ( articulo) values
+    -> ('Azucar'),
+    -> ('Pan'),
+    -> ('Mantequilla'),
+    -> ('Queso'),
+    -> ('Manzana');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from Articulos_1 left outer join Articulos_2 on Articulos_1.articulo=Articulos_2.articulo
+    -> union
+    -> select * from Articulos_1 right outer join Articulos_2 on Articulos_1.articulo=Articulos_2.articulo;
++----------+-------------+
+| articulo | articulo    |
++----------+-------------+
+| Azucar   | Azucar      |
+| Pan      | Pan         |
+| Jugo     | NULL        |
+| Refresco | NULL        |
+| Harina   | NULL        |
+| NULL     | Mantequilla |
+| NULL     | Queso       |
+| NULL     | Manzana     |
++----------+-------------+
+8 rows in set (0.00 sec)
+mysql> 
