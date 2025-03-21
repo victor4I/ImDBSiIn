@@ -1,0 +1,182 @@
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 23837707
+Server version: 8.0.40 Source distribution
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| Victordan$LIBRERIA |
+| Victordan$default  |
+| information_schema |
+| performance_schema |
++--------------------+
+4 rows in set (0.02 sec)
+mysql> +--------------------+
+    -> | Database           |
+    -> +--------------------+
+    -> | Victordan$LIBRERIA |
+    -> | Victordan$default  |
+    -> | information_schema |
+    -> | performance_schema |
+    -> +--------------------+
+    -> 4 rows in set (0.84 sec)
+    -> mysql> use Victordan$default  ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syn
+tax to use near '+--------------------+
+| Database           |
++--------------------+
+| Victordan' at line 1
+mysql> Database changed
+    -> mysql> CREATE TABLE Articulos_1 (
+    ->     ->     articulo varchar(15) DEFAULT NULL
+    ->     -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syn
+tax to use near 'Database changed
+mysql> CREATE TABLE Articulos_1 (
+    ->     articulo varchar(1' at line 1
+mysql> Query OK, 0 rows affected (0.04 sec)
+    -> mysql> CREATE TABLE Articulos_2 (
+    ->     ->     articulo varchar(15) DEFAULT NULL
+    ->     -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syn
+tax to use near 'Query OK, 0 rows affected (0.04 sec)
+mysql> CREATE TABLE Articulos_2 (
+    ->   ' at line 1
+mysql> Query OK, 0 rows affected (0.03 sec)
+    -> mysql> 
+    -> mysql> insert into Articulos_1 ( articulo) values
+    ->     -> ('Azucar'),
+    ->     -> ('Pan'),
+    ->     -> ('Jugo'),
+    ->     -> ('Refresco'),
+    ->     -> ('Harina');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 0 rows affected (0.03 sec)
+mysql> 
+mysql> insert into Articulos_1 ( ar' at line 1
+mysql> Query OK, 5 rows affected (0.03 sec)
+    -> Records: 5  Duplicates: 0  Warnings: 0
+    -> mysql> insert into Articulos_2 ( articulo) values
+    ->     -> ('Azucar'),
+    ->     -> ('Pan'),
+    ->     -> ('Mantequilla'),
+    ->     -> ('Queso'),
+    ->     -> ('Manzana');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+mysq' at line 1
+mysql> Query OK, 5 rows affected (0.01 sec)
+    -> Records: 5  Duplicates: 0  Warnings: 0
+    -> 
+    -> mysql> select * from Articulos_1 left outer join Articulos_2 on Articulos_1.articulo=Articulos_2.articulo
+    ->     -> union
+    ->     -> select * from Articulos_1 right outer join Articulos_2 on Articulos_1.articulo=Articulos_2.articulo;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mys' at line 1
+mysql> +----------+-------------+
+    -> | articulo | articulo    |
+    -> +----------+-------------+
+    -> | Azucar   | Azucar      |
+    -> | Pan      | Pan         |
+    -> | Jugo     | NULL        |
+    -> | Refresco | NULL        |
+    -> | Harina   | NULL        |
+    -> | NULL     | Mantequilla |
+    -> | NULL     | Queso       |
+    -> | NULL     | Manzana     |
+    -> +----------+-------------+
+    -> 8 rows in set (0.00 sec)
+    -> mysql> CREATE TABLE empleados_Victor(
+    ->     empleados varchar (15) DEFAULT NULL
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+----------+-------------+
+| articulo | articulo    |
++----------+-------------+' at line 1
+mysql> CREATE TABLE empleados_Victor(
+    ->     id_empleados interger(50),
+    ->     id_gerente interger(20),
+    ->     puesto varchar(50),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'interger(50),
+    id_gerente interger(20),
+    puesto varchar(50),
+)' at line 2
+mysql> CREATE TABLE empleados_Victor(
+    ->     id_empleados int(50),
+    ->     id_gerente int (20),
+    ->     puesto varchar(50)
+    -> );
+Query OK, 0 rows affected, 2 warnings (0.02 sec)
+
+mysql> INSERT INTO Empleados (id_empleados, id_gerente, puesto) values 
+    -> (1001, null, 'presidente'),
+    -> (2002, 1001, 'director'),
+    -> (3003, 1001, 'gerente'),
+    -> (4004, 2002, 'ingeniero'),
+    -> (5005, 2002, 'contador'),
+    -> (6006, 2002, 'administrador');
+ERROR 1146 (42S02): Table 'Victordan$default.Empleados' doesn't exist
+mysql> INSERT INTO empleados_Victor (id_empleados, id_gerente, puesto) values 
+    -> (1001, null, 'presidente'),
+    -> (2002, 1001, 'director'),
+    -> (3003, 1001, 'gerente'),
+    -> (4004, 2002, 'ingeniero'),
+    -> (5005, 2002, 'contador'),
+    -> (6006, 2002, 'administrador');
+Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> 
+
+
+
+mysql> 
+
+mysql> 
+
+
+mysql> 
+
+mysql> 
+
+mysql> 
+
+mysql> 
+
+mysql> 
+
+mysql> 
+
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> CREATE TABLE puesto_Victor(
+    ->     id_empleados int(50),
+    ->     id_gerente int (20),
+    ->     puesto varchar(50),
+    ->     nivel varchar(50)
+    -> );
+Query OK, 0 rows affected, 2 warnings (0.02 sec)
+mysql> 
