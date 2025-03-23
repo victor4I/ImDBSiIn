@@ -1,0 +1,182 @@
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 25163261
+Server version: 8.0.40 Source distribution
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| Victordan$LIBRERIA |
+| Victordan$default  |
+| information_schema |
+| performance_schema |
++--------------------+
+4 rows in set (0.02 sec)
+
+mysql> use Victordan$default;
+Database changed
+mysql> mysql> CREATE TABLE Carrito_1 (
+    ->     -> Articulo varchar(13) DEFAULT NULL
+    ->     -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'mysql> CREATE TABLE Carrito_1 (
+    -> Articulo varchar(13) DEFAULT NULL
+    -> ' at line 1
+mysql> Query OK, 0 rows affected (0.03 sec)
+    -> 
+    -> mysql> INSERT INTO Carrito_1 values 
+    ->     -> ('Azúcar'),
+    ->     -> ('Pan'),
+    ->     -> ('Jugo'),
+    ->     -> ('Refresco'),
+    ->     -> ('Harina');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO Carrito_1 values 
+    -' at line 1
+mysql> Query OK, 5 rows affected (0.00 sec)
+    -> Records: 5  Duplicates: 0  Warnings: 0
+    -> 
+    -> mysql> CREATE TABLE Carrito_2 (
+    ->     -> Articulo varchar(13) DEFAULT NULL
+    ->     -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mys' at line 1
+mysql> Query OK, 0 rows affected (0.03 sec)
+    -> 
+    -> mysql> INSERT INTO Carrito_2 values 
+    ->     -> ('Azúcar'),
+    ->     -> ('Pan'),
+    ->     -> ('Mantequilla'),
+    ->     -> ('Queso'),
+    ->     -> ('Manzana');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO Carrito_2 values 
+    -' at line 1
+mysql> Query OK, 5 rows affected (0.01 sec)
+    -> Records: 5  Duplicates: 0  Warnings: 0
+    -> 
+    -> mysql> Select * from Carrito_1 left join Carrito_2 on Carrito_1.Articulo = Carrito_2.Articulo
+    ->     -> UNION 
+    ->     -> Select * from Carrito_1 right join Carrito_2 on Carrito_1.Articulo = Carrito_2.Articulo;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mys' at line 1
+mysql> +----------+-------------+
+    -> | Articulo | Articulo    |
+    -> +----------+-------------+
+    -> | Azúcar   | Azúcar      |
+    -> | Pan      | Pan         |
+    -> | Jugo     | NULL        |
+    -> | Refresco | NULL        |
+    -> | Harina   | NULL        |
+    -> | NULL     | Mantequilla |
+    -> | NULL     | Queso       |
+    -> | NULL     | Manzana     |
+    -> +----------+-------------+
+    -> 8 rows in set (0.00 sec)
+    -> 
+    -> mysql> CREATE TABLE Empleados (
+    ->     ->     id_Empleado INT(20) NOT NULL,
+    ->     ->     id_gerente INT(20) NOT NULL,
+    ->     ->     Puesto varchar(20) DEFAULT NULL
+    ->     -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+----------+-------------+
+| Articulo | Articulo    |
++----------+-------------+' at line 1
+mysql> Query OK, 0 rows affected, 2 warnings (0.02 sec)
+    -> 
+    -> mysql> INSERT INTO Empleados (id_Empleado,id_gerente,Puesto) VALUES
+    ->     -> (1001, 0,'Presidente'),
+    ->     -> (2002, 1001,'Director'),
+    ->     -> (3003, 1001,'Gerente'),
+    ->     -> (4004, 2002,'Ingeniero'),
+    ->     -> (5005,2002,'Contador'),
+    ->     -> (6006,2002,'Administrador');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 0 rows affected, 2 warnings (0.02 sec)
+
+mysql> INSERT INTO Empleados (' at line 1
+mysql> Query OK, 6 rows affected (0.00 sec)
+    -> Records: 6  Duplicates: 0  Warnings: 0
+    -> 
+    -> mysql> SELECT e.id_Empleado, e.id_gerente, e.Puesto,
+    ->     ->     CASE 
+    ->     ->         WHEN e.id_gerente = 0 THEN 0
+    ->     ->         WHEN e.id_gerente = 2002 THEN 2
+    ->     ->         ELSE 1
+    ->     ->     END AS Nivel
+    ->     -> FROM Empleados e
+    ->     -> ORDER BY Nivel, id_gerente;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mys' at line 1
+mysql> +-------------+------------+---------------+-------+
+    -> | id_Empleado | id_gerente | Puesto        | Nivel |
+    -> +-------------+------------+---------------+-------+
+    -> |        1001 |          0 | Presidente    |     0 |
+    -> |        2002 |       1001 | Director      |     1 |
+    -> |        3003 |       1001 | Gerente       |     1 |
+    -> |        4004 |       2002 | Ingeniero     |     2 |
+    -> |        5005 |       2002 | Contador      |     2 |
+    -> |        6006 |       2002 | Administrador |     2 |
+    -> +-------------+------------+---------------+-------+
+    -> 6 rows in set (0.00 sec)
+    ->     -> ('Pan'),
+    -> mysql> CREATE TABLE Pedidos (
+    ->     -> id_Cliente INT(13),
+    ->     -> id_Orden INT(13),
+    ->     -> Estado_Destino varchar(10),
+    ->     -> Costo decimal (10,2)
+    ->     -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right synta
+x to use near '+-------------+------------+---------------+-------+
+| id_Empleado | id_gerente ' at line 1
+mysql> Query OK, 0 rows affected, 2 warnings (0.03 sec)
+    -> mysql> INSERT INTO Pedidos (id_Cliente,id_Orden,Estado_Destino,Costo) VALUES
+    ->     -> (1001,1,'JAL',987),
+    ->     -> (1001,2,'CDMX',400),
+    ->     -> (1001,3,'CDMX',545),
+    ->     -> (1001,4,'CDMX',321),
+    ->     -> (2002,5,'MTY',324),
+    ->     -> (3003,6,'JAL',931),
+    ->     -> (4004,7,'JAL',876),
+    ->     -> (5005,8,'CDMX',567);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right synta
+x to use near 'Query OK, 0 rows affected, 2 warnings (0.03 sec)
+mysql> INSERT INTO Pedidos (id_' at line 1
+mysql> Query OK, 8 rows affected (0.01 sec)
+    -> Records: 8  Duplicates: 0  Warnings: 0
+    -> mysql> SELECT DISTINCT p1.id_Cliente, p1.id_Orden, p1.Estado_Destino, p1.Costo
+    ->     -> FROM Pedidos p1
+    ->     -> WHERE p1.Estado_Destino = 'CDMX'
+    ->     -> AND p1.id_Cliente IN (
+    ->     ->     SELECT id_Cliente FROM Pedidos WHERE Estado_Destino = 'JAL'
+    ->     -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right synta
+x to use near 'Query OK, 8 rows affected (0.01 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+mysq' at line 1
+mysql> +------------+----------+----------------+--------+
+    -> | id_Cliente | id_Orden | Estado_Destino | Costo  |
+    -> +------------+----------+----------------+--------+
+    -> |       1001 |        2 | CDMX           | 400.00 |
+    -> |       1001 |        3 | CDMX           | 545.00 |
+    -> |       1001 |        4 | CDMX           | 321.00 |
+    -> +------------+----------+----------------+--------+
+    -> 3 rows in set (0.00 sec)
+    -> mysql>
