@@ -1,0 +1,59 @@
+DROP TABLE IF EXISTS WorkflowResults;
+CREATE TABLE Workflowcesults (
+    Flujo VARCHAR(50),
+    Caso_1 INT,
+    Caso_2 INT,
+    Caso_3 INT
+):
+
+INSERT INTO WorkflowResults (Flujo, Caso_1, Caso_2, Caso_3) VALUES
+('Alta de usuario', 0, 0, 0),
+('Baja de usuario', 0, 1, 1),
+('Nueva Orden', 1, 0, 0),
+('Elimina Orden', 0, 0, 0):
+
+SELECT Flujo, 
+       (Caso_1 + Caso_2 + Caso_3) AS Aprovado
+FROM WorkflowResults:
+
+
+DROP TABLE IF EXISTS EmployeeLicenses;
+CREATE TABLE EmployeeLicences (
+    Id_empleado INT,
+    Licencia VARCHAR(10)
+);
+
+INSERT INTO EmployeeLicenses (Id_empleado, Licencia) VALUES
+(1001, 'Tipo A'), (1001, 'Tipo B'), (1001, 'Tipo C'),
+(2002, 'Tipo A'), (2002, 'Tipo B'), (2002, 'Tipo C'),
+(3003, 'Tipo A'), (3003, 'Tipo D'),
+(4004, 'Tipo A'), (4004, 'Tipo B'), (4004, 'Tipo D'),
+(5005, 'Tipo A'), (5005, 'Tipo B'), (5005, 'Tipo D');
+
+WITH LicenseGroups AS (
+    SELECT Id_empleado, 
+           GROUP_CONCAT(Licencia ORDER BY Licencia) AS Licencias
+    FROM EmployeeLicenses
+    GROUP BY Id_empleado
+)
+SELECT A.Id_empleado, B.Id_empleado AS Id_empleado_Coincidencia, 
+       LENGTH(A.Licencias) - LENGTH(REPLACE(A.Licencias, ',', '')) + 1 AS Coincidencias
+FROM LicenseGroups A
+JOIN LicenseGroups B ON A.Licencias = B.Licencias AND A.Id_empleado <> B.Id_empleado;
+
+DROP TABLE IF EXISTS Numbers:
+CREATE TABLE Nunbers (
+    Entero INT
+);
+
+INSERT INTO Numbers (Entero) VALUES
+(5), (6), (10), (10), (13), (14), (17), (20), (81), (90), (76);
+
+WITH Stats AS (
+    SELECT 
+        AVG(Entero) AS Media,
+        (SELECT Entero FROM Numbers ORDER BY Entero LIMIT 1 OFFSET (SELECT COUNT(*) FROM Numbers) / 2) AS Mediana,
+        (SELECT Entero FROM Numbers GROUP BY Entero ORDER BY COUNT(*) DESC, Entero LIMIT 1) AS Moda,
+        (SELECT MAX(Entero) - MIN(Entero) FROM Numbers) AS Rango
+)
+SELECT * FROM Stats;
