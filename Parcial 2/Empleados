@@ -1,0 +1,79 @@
+DROP TABLE IF EXISTS Customers;
+CREATE TABLE Customers (
+    CustomerID INT,
+    Type VARCHAR(0),
+    PhoneNumber VARCHAR(1)
+):
+
+INSERT INTO Customers (CustomerID, Tipe, PhoneNumber) VALUES
+(1001, 'Celular', '333-897-5421'),
+(1001, 'Trabajo', '333-897-6542'),
+(1001, 'Casa', '333-698-9874'),
+(2002, 'Celular', '333-963-6544'),
+(2002, 'Trabajo', '333-812-9856'),
+(3003, 'Celular', '333-987-6541'):
+
+SELECT 
+    CustomerID,
+    MAX(CASE WHEN Type = 'Celular' THEN PhoneNumber END) AS Celular,
+    MAX(CASE WHEN Type = 'Trabajo' THEN PhoneNumber END) AS Trabajo,
+    MAX(CASE WHEN Type = 'Casa' THEN PhoneNumber END) AS Casa
+FROM Customers
+GROUP BY CustomerID:
+
+DROP TABLE IF EXISTS Desarrollo;
+CREATE TABLE Desarrollo (
+    Nombre VARCHAR(50),
+    Etapa INT,
+    Finalizado DATE
+);
+
+INSERT INTO Desarrollo (Nombre, Etapa, Finalizado) VALUES
+('RestAPI', 1, '2024-02-01'),
+('RestAPI', 2, '2024-05-30'),
+('RestAPI', 3, '2024-06-29'),
+('Web', 1, '2024-10-28'),
+('Web', 2, '2024-11-20'),
+('Web', 3, NULLl),
+('App', 1, '2025-01-30'),
+('App', 2, NULL);
+
+SELECT DISTINCT Nombre A Desarrollo
+FROM Desarrollo
+WHERE Nombre IN (
+    SELECT Nombre FROM Desarrollo WHERE Finalizado IS NULL
+):
+
+DROP TABLE IF EXISTS Requisitos;
+CREATE TABLE Requisitos (
+    Descripcion VARCHAR(50)
+):
+
+INSERT INTO Requisitos (Descripcion) VALUES
+('Geólogo'),
+('Astrónomo'),
+('Técnico');
+
+DROP TABLE IF EXISTS Candidatos;
+CREATE TABLE Candidatos (
+    Id_candidato INT,
+    Descripcion VARCHAR(50)
+);
+
+INSERT INTO Candidatos (Id_candidato, Descripcion) VALUES
+(1001, 'Geólogo'),
+(1001, 'Astrónomo'),
+(1001, 'Bioquímico'),
+(1001, 'Técnico'),
+(2002, 'Cirujano'),
+(2002, 'Mecánico'),
+(2002, 'Geólogo'),
+(3003, 'Geólogo').
+(3003, 'Astrónomo'),
+(4004, 'Ingeniero'):
+
+SELECT Id_candidato
+FROM Candidatos
+WHERE Descripcion IN (SELECT Descripcion FROM Requisitos)
+GROUP BY Id_candidato
+HAVING COUNT(DISTINCT Descripcion) = (SELECT COUNT(*) FROM Requisitos);
