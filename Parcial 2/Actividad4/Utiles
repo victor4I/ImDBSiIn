@@ -1,0 +1,65 @@
+DROP TABLE IF EXISTS Productos;
+
+CREATE TABLE Productos (
+    Producto VARCHAR(20),
+    Cantidad INT
+);
+
+INSERT INTO Productos VALUES
+('Lápiz', 3),
+('Borrador', 4),
+('Cuaderno', 2);
+
+SELECT Producto, 1 AS Cantidad
+FROM Productos
+JOIN (SELECT 1 AS n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4) num
+ON num.n <= Productos.Cantidad
+ORDER BY Producto;
+
+
+WITH Rangos AS (
+    SELECT num_asiento, 
+           num_asiento - ROW_NUMBER() OVER (ORDER BY num_asiento) AS grupo
+    FROM asientos
+), 
+Espacios AS (
+    SELECT MIN(num_asiento) AS espacio_inicio, MAX(num_asiento) AS espacio_final
+    FROM Rangos
+    GROUP BY grupo
+),
+Totales AS (
+    SELECT COUNT(*) AS total_disponibles FROM asientos
+),
+Pares_Impares AS (
+    SELECT 
+        SUM(CASE WHEN num_asiento % 2 = 0 THEN 1 ELSE 0 END) AS pares,
+        SUM(CASE WHEN num_asiento % 2 <> 0 THEN 1 ELSE 0 END) AS impares
+    FROM asientos
+)
+SELECT * FROM Espacios;
+SELECT * FROM Totales;
+SELECT * FROM Pares_Impares;
+
+
+CREATE TABLE Periodos (
+    Inicio DATE,
+    Final DATE
+);
+
+INSERT INTO Periodos VALUES
+('2025-01-01', '2025-01-05'),
+('2025-01-03', '2025-01-09'),
+('2025-01-10', '2025-01-11'),
+('2025-01-12', '2025-01-16'),
+('2025-01-15', '2025-01-19');
+
+WITH Recursivo AS (
+    SELECT Inicio, Final FROM Periodos
+    UNION ALL
+    SELECT p1.Inicio, p2.Final
+    FROM Recursivo p1
+    JOIN Periodos p2 ON p1.Final >= p2.Inicio AND p1.Final < p2.Final
+)
+SELECT MIN(Inicio) AS Inicio, MAX(Final) AS Final
+FROM Recursivo
+GROUP BY Inicio;
