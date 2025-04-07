@@ -1,0 +1,115 @@
+DROP TABLE IF EXISTS Precios_de_demanda;
+
+CREATE TABLE Productos_de_demanda(
+    ID_PRODUCTO INT,
+    FECHA DATE TIME,
+    PRECIO DECIMAL (10, 2)
+);
+
+INSERT INTO Productos_de_demanda (ID_PRODUCTO, FECHA, PRECIO) VALUES 
+(1001, '2025-01_01', 19.99),
+(1001, '2025-04-15', 59.99),
+(1001, '06-08-2025', 79.99),
+(2002, '04-17-2025', 39.99),
+(2002, '05-19-2025', 59.99);
+
+WITH UltimosPrecios AS (
+    SELECT 
+        Id_producto, 
+        MAX(Fecha) AS Fecha
+    FROM Precios
+    GROUP BY Id_producto
+)
+SELECT p.Id_producto, p.Fecha, p.Precio
+FROM Precios p
+JOIN UltimosPrecios u 
+  ON p.Id_producto = u.Id_producto AND p.Fecha = u.Fecha
+ORDER BY p.Id_producto;
+
+DROP TABLE IF EXISTS Ventas;
+
+CREATE TABLE Ventas (
+    Id_orden INT,
+    Id_cliente INT,
+    Fecha DATE,
+    Total DECIMAL(10, 2),
+    Estado VARCHAR(10)
+);
+
+INSERT INTO Ventas VALUES
+(1, 1001, '2025-01-01', 100, 'JAL'),
+(2, 1001, '2025-01-01', 150, 'JAL'),
+(3, 1001, '2025-01-01', 75,  'JAL'),
+(4, 1001, '2025-02-01', 100, 'JAL'),
+(5, 1001, '2025-03-01', 100, 'JAL'),
+(6, 2002, '2025-02-01', 75,  'JAL'),
+(7, 2002, '2025-02-01', 150, 'JAL'),
+(8, 3003, '2025-01-01', 100, 'CDMX'),
+(9, 3003, '2025-02-01', 100, 'CDMX'),
+(10, 3003, '2025-03-01', 100, 'CDMX'),
+(11, 4004, '2025-04-01', 100, 'CDMX'),
+(12, 4004, '2025-05-01', 50,  'CDMX'),
+(13, 4004, '2025-05-01', 100, 'CDMX');
+
+WITH VentasMensuales AS (
+    SELECT 
+        Id_cliente,
+        Estado,
+        DATE_TRUNC('month', Fecha) AS Mes,
+        SUM(Total) AS Total_Mensual
+    FROM Ventas
+    GROUP BY Id_cliente, Estado, DATE_TRUNC('month', Fecha)
+),
+PromediosPorCliente AS (
+    SELECT 
+        Id_cliente,
+        Estado,
+        AVG(Total_Mensual) AS Promedio
+    FROM VentasMensuales
+    GROUP BY Id_cliente, Estado
+),
+ClientesValidos AS (
+    SELECT Estado
+    FROM PromediosPorCliente
+    WHERE Promedio > 100
+    GROUP BY Estado
+    HAVING COUNT(*) = (
+        SELECT COUNT(*) 
+        FROM PromediosPorCliente p2
+        WHERE p2.Estado = PromediosPorCliente.Estado
+    )
+)
+SELECT DISTINCT Estado
+FROM ClientesValidos;
+
+
+DROP TABLE IF EXISTS Registros;
+
+CREATE TABLE Registros (
+    Proceso VARCHAR(20),
+    Mensaje TEXT,
+    Ocurrencia INT
+);
+
+INSERT INTO Registros VALUES
+('Web',     'Error: No se puede dividir por 0', 3),
+('RestAPI', 'Error: Fallo la conversión',        5),
+('App',     'Error: Fallo la conversión',        7),
+('RestAPI', 'Error: Error sin identificar',      9),
+('Web',     'Error: Error sin identificar',      1),
+('App',     'Error: Error sin identificar',     10),
+('Web',     'Estado Completado',                 8),
+('RestAPI', 'Estado Completado',                 6);
+
+WITH RankingMensajes AS (
+    SELECT 
+        Proceso,
+        Mensaje,
+        Ocurrencia,
+        RANK() OVER (PARTITION BY Mensaje ORDER BY Ocurrencia DESC) AS rnk
+    FROM Registros
+)
+SELECT Proceso, Mensaje, Ocurrencia
+FROM RankingMensajes
+WHERE rnk = 1
+ORDER BY Mensaje;
