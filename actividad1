@@ -1,0 +1,40 @@
+CREATE TABLE numeros (
+    paso INT,         
+    estado VARCHAR(50), 
+);
+
+(INSERT INTO numeros (paso, estado ) VALUES)
+(1, 'paso'),
+(2, 'paso'),
+(3, 'paso'),
+(4, 'paso'),
+(5, 'paso'),
+(6, 'paso'),
+(7, 'paso'),
+(8, 'paso'),
+(9, 'paso'),
+(10, 'paso'),
+(11, 'paso'),
+(12, 'paso');
+
+
+
+WITH calculos AS (
+  SELECT 
+      paso,
+      estado,
+      paso, - Row_number () OVER (ORDER BY
+      paso) AS (
+        SELECT
+        min(paso) AS "paso min"
+        MAX (paso) AS "paso"
+        estado,
+        count(*) AS "cuenta"
+        FROM calculos 
+        group by estado, grupo_id 
+      )
+      SELECT * 
+      FROM resultado
+      order by "paso min";
+  FROM resultado
+  )
