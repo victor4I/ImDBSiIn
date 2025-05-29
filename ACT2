@@ -1,0 +1,33 @@
+CREATE TABLE SOLICITUD (
+    ID INT (50) NOT NULL, 
+    TRABAJO VARCHAR (50) NOT NULL,
+    MISIONES INT (50) NOT NULL
+);
+
+(INSERT INTO SOLICITUD (INT, TRABAJO, MISIONES) VALUES)
+(1,'NAVEGADOR', 6)
+(2, 'NAVEGADOR', 12)
+(3, 'NAVEGADOR', 17)
+(4, 'GEOLOGO', 21)
+(5, 'GEOLOGO', 9)
+(6, 'GEOLOGO', 8)
+(7, 'TECNICO', 13)
+(8, 'TECNICO', 2)
+(9,'TECNICO', 7)
+WITH CTE_Rangos AS (
+  SELECT
+    Id,
+    Trabajo,
+    Misiones,
+    ROW_NUMBER() OVER (PARTITION BY Trabajo ORDER BY Misiones DESC) AS rn_max,
+    ROW_NUMBER() OVER (PARTITION BY Trabajo ORDER BY Misiones ASC) AS rn_min
+  FROM astronautas
+);
+SELECT
+  Trabajo,
+  MAX(CASE WHEN rn_max = 1 THEN Id END) AS Experimentados,
+  MAX(CASE WHEN rn_min = 1 THEN Id END) AS Menos_Experimentados
+FROM CTE_Rangos
+GROUP BY Trabajo;
+
+
