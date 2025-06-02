@@ -1,0 +1,26 @@
+REVOKE permisos ON base_de_datos.tabla FROM 'usuario'@'host';
+
+REVOKE SELECT, INSERT, UPDATE, DELETE ON exampledb.* FROM 'exampleuser'@'localhost';
+
+FLUSH PRIVILEGES;
+
+EXIT;
+
+
+
+Permisos por rol (consulta de agentes externos):
+
+PO (Product Owner):
+📖 Lectura únicamente
+
+PM (Project Manager):
+✏️ Editar, crear y eliminar registros
+
+Architect:
+🛠️ Editar, crear, eliminar y acceso a información técnica
+
+BA (Business Analyst):
+📖 Lectura únicamente
+
+Developer:
+📖 Lectura únicamente
