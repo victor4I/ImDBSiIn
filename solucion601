@@ -1,0 +1,22 @@
+SELECT
+    id,
+    visit_date,
+    people
+FROM
+    (SELECT
+        id,
+        visit_date,
+        people,
+        LAG(id, 1) OVER (ORDER BY id) AS prev_id_1,
+        LAG(id, 2) OVER (ORDER BY id) AS prev_id_2,
+        LEAD(id, 1) OVER (ORDER BY id) AS next_id_1,
+        LEAD(id, 2) OVER (ORDER BY id) AS next_id_2
+    FROM
+        stadium
+    WHERE people >= 100) AS subquery
+WHERE
+    (id - prev_id_1 = 1 AND id - prev_id_2 = 2) OR
+    (id - prev_id_1 = 1 AND next_id_1 - id = 1) OR
+    (next_id_1 - id = 1 AND next_id_2 - next_id_1 = 1)
+ORDER BY
+    visit_date ASC;
