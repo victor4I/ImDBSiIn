@@ -1,0 +1,28 @@
+Victor Daniel Sanchez de la Cruz
+SELECT ip, COUNT(*) AS invalid_count
+FROM logs
+WHERE 
+    
+    LENGTH(ip) - LENGTH(REPLACE(ip, '.', '')) != 3
+    OR
+    
+    EXISTS (
+        SELECT 1
+        FROM (
+            SELECT log_id, ip,
+                   SUBSTRING_INDEX(ip, '.', 1) AS part1,
+                   SUBSTRING_INDEX(SUBSTRING_INDEX(ip, '.', 2), '.', -1) AS part2,
+                   SUBSTRING_INDEX(SUBSTRING_INDEX(ip, '.', 3), '.', -1) AS part3,
+                   SUBSTRING_INDEX(ip, '.', -1) AS part4
+            FROM logs
+        ) AS parts
+        WHERE parts.ip = logs.ip
+          AND (
+              part1 NOT REGEXP '^(0|[1-9][0-9]{0,2})$' OR CAST(part1 AS UNSIGNED) > 255 OR
+              part2 NOT REGEXP '^(0|[1-9][0-9]{0,2})$' OR CAST(part2 AS UNSIGNED) > 255 OR
+              part3 NOT REGEXP '^(0|[1-9][0-9]{0,2})$' OR CAST(part3 AS UNSIGNED) > 255 OR
+              part4 NOT REGEXP '^(0|[1-9][0-9]{0,2})$' OR CAST(part4 AS UNSIGNED) > 255
+          )
+    )
+GROUP BY ip
+ORDER BY invalid_count DESC, ip DESC;
