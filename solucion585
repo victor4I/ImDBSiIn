@@ -1,0 +1,30 @@
+SELECT
+    ROUND(SUM(T.tiv_2016), 2) AS tiv_2016
+FROM
+    Insurance AS T
+WHERE
+    -- Condition 1: Policyholders who have the same tiv_2015 value as one or more other policyholders.
+    T.tiv_2015 IN (
+        SELECT
+            tiv_2015
+        FROM
+            Insurance
+        GROUP BY
+            tiv_2015
+        HAVING
+            COUNT(tiv_2015) > 1
+    )
+    AND
+    -- Condition 2: Policyholders who are not located in the same city as any other policyholder (unique (lat, lon)).
+    (T.lat, T.lon) IN (
+        SELECT
+            lat,
+            lon
+        FROM
+            Insurance
+        GROUP BY
+            lat,
+            lon
+        HAVING
+            COUNT(*) = 1
+    );
